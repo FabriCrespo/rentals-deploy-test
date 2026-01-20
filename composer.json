@@ -6,8 +6,8 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
-        "endroid/qr-code": "5.0",
+        "php": "^8.4",
+        "endroid/qr-code": "^6.0",
         "laravel/framework": "^11.0"
     },
     "require-dev": {
@@ -74,9 +74,6 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
-        },
-        "audit": {
-            "ignore": ["PKSA-8qx3-n5y5-vvnd", "PKSA-w7xr-vk7n-rstm"]
         }
     },
     "minimum-stability": "stable",
