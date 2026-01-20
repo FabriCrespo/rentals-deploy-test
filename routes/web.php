@@ -7,70 +7,78 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\StockController;
 
+/*
+|--------------------------------------------------------------------------
+| Health check (NO middleware)
+|--------------------------------------------------------------------------
+*/
 Route::get('/_health', function () {
     return response('OK', 200);
 });
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Home
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
-
-Route::get('/', function () {
-    return response()->json([
-        'status' => 'ok',
-        'app' => config('app.name'),
-        'env' => app()->environment(),
-    ]);
-});
-
-
-// Página principal
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Productos
+/*
+|--------------------------------------------------------------------------
+| Products
+|--------------------------------------------------------------------------
+*/
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/stock/check', [StockController::class, 'check'])->name('stock.check');
 
-// Carrito
+/*
+|--------------------------------------------------------------------------
+| Cart
+|--------------------------------------------------------------------------
+*/
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/{id}', [CartController::class, 'remove'])->name('cart.remove');
 Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
-Route::get('/cart', [CartController::class, 'show'])->name('cart.show')->middleware('web');
-Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon');
-Route::delete('/cart/remove-coupon', [CartController::class, 'removeCoupon'])->name('cart.removeCoupon');
+Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 
-// Checkout
+/*
+|--------------------------------------------------------------------------
+| Checkout
+|--------------------------------------------------------------------------
+*/
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::post('/checkout/calculate-fees', [CheckoutController::class, 'calculateFees'])->name('checkout.calculateFees');
-// Payment verification routes removed - payments handled via Odoo invoices
 
-// Órdenes que requieren autenticación
+/*
+|--------------------------------------------------------------------------
+| Orders (auth)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('order');
 });
 
-// Autenticación
+/*
+|--------------------------------------------------------------------------
+| Auth
+|--------------------------------------------------------------------------
+*/
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-
-// Páginas estáticas
+/*
+|--------------------------------------------------------------------------
+| Static pages
+|--------------------------------------------------------------------------
+*/
 Route::get('/about-us', [PageController::class, 'about'])->name('about');
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/fees-surcharges', [PageController::class, 'fees'])->name('fees');
