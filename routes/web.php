@@ -22,6 +22,15 @@ use App\Http\Controllers\StockController;
 |
 */
 
+Route::get('/', function () {
+    return response()->json([
+        'status' => 'ok',
+        'app' => config('app.name'),
+        'env' => app()->environment(),
+    ]);
+});
+
+
 // Página principal
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
