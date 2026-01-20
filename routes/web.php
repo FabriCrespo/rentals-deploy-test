@@ -11,6 +11,10 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\StockController;
 
+Route::get('/_health', function () {
+    return response('OK', 200);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
